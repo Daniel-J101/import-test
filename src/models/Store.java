@@ -24,10 +24,17 @@ public class Store {
     }
 
     public void action(String name, String action) {
+        if(movies.isEmpty())
+            throw new IllegalStateException("action cannot be done with no movies");
+
+        if(name == null || name.isEmpty() || !(action.equalsIgnoreCase("sell") || action.equalsIgnoreCase("rent") || action.equalsIgnoreCase("return")))
+            throw new IllegalArgumentException("Incorrect parameters.");
         for (int i = 0; i < movies.size(); i++) {
             if(movies.get(i).getName().equals(name)) {
                 switch(action) {
                     case "sell":
+                        if(!movies.get(i).isAvailable())
+                            throw new IllegalStateException("You cannot sell a movie that is rented");
                         movies.remove(i);
                         break;
                     case "rent":
