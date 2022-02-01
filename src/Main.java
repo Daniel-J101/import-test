@@ -20,6 +20,7 @@ public class Main {
             System.out.println(store);
             manageMovies();
         }
+        System.out.println("Hi!");
 
 
 //        System.out.println(movie);
