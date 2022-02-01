@@ -15,6 +15,15 @@ public class Store {
         return new Movie(movies.get(index));
     }
 
+    public Movie getMovie(String name) {
+        for (int i = 0; i < movies.size(); i++) {
+            if(movies.get(i).getName().equals(name)) {
+                return movies.get(i);
+            }
+        }
+        throw new IllegalArgumentException("There is no movie with that name.");
+    }
+
     public void setMovie(int index, Movie movie) {
         movies.set(index, movie);
     }

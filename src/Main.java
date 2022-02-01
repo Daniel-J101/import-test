@@ -1,24 +1,26 @@
 import models.Movie;
 import models.Store;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class Main {
+
+    private static Store store = new Store();
+
     public static void main(String[] args) {
         System.out.println("\n********************JAVA VIDEO STORE********************\n");
-        Movie movie = new Movie("The Shawshank Redemption", "Blue-Ray", 9.2);
-        Store store = new Store();
-        store.addMovie(new Movie(movie));
-        store.addMovie(new Movie("The Godfather", "Blue-Ray", 9.1));
-        store.addMovie(new Movie("The Godfather: Part II", "DVD", 9.0));
-        System.out.println(store);
-        System.out.println("---------------------------------------");
-        store.action("The Godfather", "sell");
-        System.out.println(store);
-        System.out.println("---------------------------------------");
-        store.action("The Shawshank Redemption", "rent");
-        System.out.println(store);
-        System.out.println("--------------------------------------");
-        store.action("The Shawshank Redemption", "return");
-        System.out.println(store);
+        try {
+            loadMovies("Movies.txt");
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            System.out.println("MOVIES LOADED\n\n");
+            System.out.println(store);
+            manageMovies();
+        }
+
 
 //        System.out.println(movie);
 
@@ -34,6 +36,51 @@ public class Main {
      *   •        case c: ask for the name and return.
      *   • 3. call close() from the Scanner object.
      */
+    public static void manageMovies() {
+        Scanner scanner = new Scanner(System.in);
+
+        while(true) {
+            System.out.println("\nWould you like to \n\ta) purchase\n\tb) rent \n\tc) return \n\td) exit");
+            String answer = scanner.nextLine();
+
+            if(!(answer.equals("a") || answer.equals("b") || answer.equals("c")))
+                break;
+
+            System.out.println("Please enter the name of the movie ");
+            String name = scanner.nextLine();
+            if(name.isEmpty()) {
+                System.out.println("\n\nThe input you provided is not valid. Please try again\n");
+                continue;
+            }
+
+            switch(answer) {
+                case "a":
+                    if(!store.getMovie(name).isAvailable()) {
+                        System.out.println("\n\n\n\nThe movie is not available for purchasing. Please try again\n");
+                        continue;
+                    }
+                    store.action(name, "sell");
+                    break;
+                case "b":
+                    if(!store.getMovie(name).isAvailable()) {
+                        System.out.println("\n\n\n\nThe movie is not available for renting. Please try again\n");
+                        continue;
+                    }
+                    store.action(name, "rent");
+                    break;
+                case "c":
+                    store.action(name, "return");
+                    break;
+                default:
+                    System.out.println("Something went wrong.");
+            }
+
+            System.out.println("\n\nUPDATED MOVIES\n\n");
+            System.out.println(store);
+        }
+
+        scanner.close();
+    }
 
 
     /**
@@ -46,5 +93,18 @@ public class Main {
      *   • 2. adds all movies to the store object's movie field.
      *        Hint: You will need to 'split' a String into three Strings.
      */
+    public static void loadMovies(String fileName) throws FileNotFoundException {
+        FileInputStream fis = new FileInputStream(fileName);
+        Scanner scanner = new Scanner(fis);
+
+        while(scanner.hasNextLine()) {
+            String info = scanner.nextLine();
+            String[] piece = info.split("--");
+            Movie temp = new Movie(piece[0], piece[1], Double.parseDouble(piece[2]));
+            store.addMovie(temp);
+        }
+
+        scanner.close();
+    }
 
 }
