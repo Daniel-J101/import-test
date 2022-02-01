@@ -1,10 +1,26 @@
 import models.Movie;
+import models.Store;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("\n********************JAVA VIDEO STORE********************\n");
         Movie movie = new Movie("The Shawshank Redemption", "Blue-Ray", 9.2);
-        System.out.println(movie);
+        Store store = new Store();
+        store.addMovie(new Movie(movie));
+        store.addMovie(new Movie("The Godfather", "Blue-Ray", 9.1));
+        store.addMovie(new Movie("The Godfather: Part II", "DVD", 9.0));
+        System.out.println(store);
+        System.out.println("---------------------------------------");
+        store.action("The Godfather", "sell");
+        System.out.println(store);
+        System.out.println("---------------------------------------");
+        store.action("The Shawshank Redemption", "rent");
+        System.out.println(store);
+        System.out.println("--------------------------------------");
+        store.action("The Shawshank Redemption", "return");
+        System.out.println(store);
+
+//        System.out.println(movie);
 
     }
 

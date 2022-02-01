@@ -85,6 +85,6 @@ public class Movie {
         return "\tName: " + name + "\n" + "\tFormat: " + format
                 + "\n" + "\tRating: " + rating + "\n" + "\tSelling Price: "
                 + sellingPrice + "\n" + "\tRental Price: " + rentalPrice + "\n"
-                + "\tAvailability: " + (isAvailable ? "in-stock " : " rented") + "\n";
+                + "\tAvailability: " + (isAvailable ? "in-stock " : "rented") + "\n";
     }
 }
